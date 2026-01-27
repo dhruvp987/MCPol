@@ -1,7 +1,11 @@
 from httpxclient import HttpxClient
 
 CONGRESS_API_BASE_URL = "https://api.congress.gov/v3"
-BILL_ENDPOINT = CONGRESS_API_BASE_URL + "/bill?format=json"
+BILL_ENDPOINT = CONGRESS_API_BASE_URL + "/bill"
+
+
+def _build_bill_overview_endpoint(congress_num: int, bill_type: str, bill_num: int):
+    return f"{CONGRESS_API_BASE_URL}/bill/{congress_num}/{bill_type}/{bill_num}"
 
 
 class CongressData:
@@ -11,4 +15,13 @@ class CongressData:
 
     async def get_bill_list(self) -> dict[str, object]:
         response = await self._client.request(BILL_ENDPOINT, self._headers)
+        return response
+
+    async def get_bill_overview(
+        self, congress_num: int, bill_type: str, bill_num: int
+    ) -> dict[str, object]:
+        bill_overview_endpoint = _build_bill_overview_endpoint(
+            congress_num, bill_type, bill_num
+        )
+        response = await self._client.request(bill_overview_endpoint, self._headers)
         return response
