@@ -4,7 +4,7 @@ CONGRESS_API_BASE_URL = "https://api.congress.gov/v3"
 BILL_ENDPOINT = CONGRESS_API_BASE_URL + "/bill"
 
 
-def _build_bill_overview_endpoint(congress_num: int, bill_type: str, bill_num: int):
+def _build_bill_overview_endpoint(congress_num: int, bill_type: str, bill_num: int) -> str:
     return f"{CONGRESS_API_BASE_URL}/bill/{congress_num}/{bill_type}/{bill_num}"
 
 
