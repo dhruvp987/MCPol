@@ -22,6 +22,9 @@ async def main():
     bill_actions = await congress_client.get_bill_actions(110, "hconres", 10)
     print(bill_actions, end="\n\n")
 
+    bill_cosponsors = await congress_client.get_bill_cosponsors(110, "hconres", 10)
+    print(bill_cosponsors, end="\n\n")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

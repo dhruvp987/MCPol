@@ -22,6 +22,12 @@ def _build_bill_actions_endpoint(
     return f"{BILL_ENDPOINT}/{congress_num}/{bill_type}/{bill_num}/actions"
 
 
+def _build_bill_cosponsors_endpoint(
+    congress_num: int, bill_type: str, bill_num: int
+) -> str:
+    return f"{BILL_ENDPOINT}/{congress_num}/{bill_type}/{bill_num}/cosponsors"
+
+
 class CongressData:
     def __init__(self, api_key: str, httpClient: HttpxClient):
         self._headers = {"x-api-key": api_key, "Accpet": "application/json"}
@@ -56,4 +62,13 @@ class CongressData:
             congress_num, bill_type, bill_num
         )
         response = await self._client.request(bill_actions_endpoint, self._headers)
+        return response
+
+    async def get_bill_cosponsors(
+        self, congress_num: int, bill_type: str, bill_num: int
+    ) -> dict[str, object]:
+        bill_cosponsors_endpoint = _build_bill_cosponsors_endpoint(
+            congress_num, bill_type, bill_num
+        )
+        response = await self._client.request(bill_cosponsors_endpoint, self._headers)
         return response
