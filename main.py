@@ -1,3 +1,4 @@
+from datetime import datetime
 import asyncio
 
 from config import Config
@@ -10,7 +11,7 @@ async def main():
     http_client = HttpxClient()
     congress_client = CongressData(config.congress_api_key, http_client)
 
-    bill_list = await congress_client.get_bill_list()
+    bill_list = await congress_client.get_bill_list(to_date_time=datetime.now())
     print(bill_list, end="\n\n")
 
     bill_overview = await congress_client.get_bill_overview(110, "hconres", 10)

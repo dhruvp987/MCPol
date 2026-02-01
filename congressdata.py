@@ -1,7 +1,28 @@
+from datetime import datetime
+
 from httpxclient import HttpxClient
 
 CONGRESS_API_BASE_URL = "https://api.congress.gov/v3"
 BILL_ENDPOINT = CONGRESS_API_BASE_URL + "/bill"
+
+
+def _build_bill_search_endpoint(
+    offset: int = 0,
+    limit: int = 20,
+    from_date_time: datetime | None = None,
+    to_date_time: datetime | None = None,
+) -> str:
+    from_date_time_param = (
+        f"&fromDateTime={from_date_time.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+        if from_date_time
+        else ""
+    )
+    to_date_time_param = (
+        f"&toDateTime={to_date_time.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+        if to_date_time
+        else ""
+    )
+    return f"{BILL_ENDPOINT}?offset={offset}&limit={limit}{from_date_time_param}{to_date_time_param}"
 
 
 def _build_bill_overview_endpoint(
@@ -39,8 +60,17 @@ class CongressData:
         self._headers = {"x-api-key": api_key, "Accpet": "application/json"}
         self._client = httpClient
 
-    async def get_bill_list(self) -> dict[str, object]:
-        response = await self._client.request(BILL_ENDPOINT, self._headers)
+    async def get_bill_list(
+        self,
+        offset: int = 0,
+        limit: int = 20,
+        from_date_time: datetime | None = None,
+        to_date_time: datetime | None = None,
+    ) -> dict[str, object]:
+        bill_search_endpoint = _build_bill_search_endpoint(
+            offset, limit, from_date_time, to_date_time
+        )
+        response = await self._client.request(bill_search_endpoint, self._headers)
         return response
 
     async def get_bill_overview(
