@@ -10,12 +10,6 @@ def _build_bill_overview_endpoint(
     return f"{BILL_ENDPOINT}/{congress_num}/{bill_type}/{bill_num}"
 
 
-def _build_bill_summaries_endpoint(
-    congress_num: int, bill_type: str, bill_num: int
-) -> str:
-    return f"{BILL_ENDPOINT}/{congress_num}/{bill_type}/{bill_num}/summaries"
-
-
 def _build_bill_actions_endpoint(
     congress_num: int, bill_type: str, bill_num: int
 ) -> str:
@@ -34,6 +28,12 @@ def _build_bill_subjects_endpoint(
     return f"{BILL_ENDPOINT}/{congress_num}/{bill_type}/{bill_num}/subjects"
 
 
+def _build_bill_summaries_endpoint(
+    congress_num: int, bill_type: str, bill_num: int
+) -> str:
+    return f"{BILL_ENDPOINT}/{congress_num}/{bill_type}/{bill_num}/summaries"
+
+
 class CongressData:
     def __init__(self, api_key: str, httpClient: HttpxClient):
         self._headers = {"x-api-key": api_key, "Accpet": "application/json"}
@@ -50,15 +50,6 @@ class CongressData:
             congress_num, bill_type, bill_num
         )
         response = await self._client.request(bill_overview_endpoint, self._headers)
-        return response
-
-    async def get_bill_summaries(
-        self, congress_num: int, bill_type: str, bill_num: int
-    ) -> dict[str, object]:
-        bill_summaries_endpoint = _build_bill_summaries_endpoint(
-            congress_num, bill_type, bill_num
-        )
-        response = await self._client.request(bill_summaries_endpoint, self._headers)
         return response
 
     async def get_bill_actions(
@@ -86,4 +77,13 @@ class CongressData:
             congress_num, bill_type, bill_num
         )
         response = await self._client.request(bill_subjects_endpoint, self._headers)
+        return response
+
+    async def get_bill_summaries(
+        self, congress_num: int, bill_type: str, bill_num: int
+    ) -> dict[str, object]:
+        bill_summaries_endpoint = _build_bill_summaries_endpoint(
+            congress_num, bill_type, bill_num
+        )
+        response = await self._client.request(bill_summaries_endpoint, self._headers)
         return response
