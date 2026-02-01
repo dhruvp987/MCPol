@@ -12,8 +12,10 @@ async def main():
 
     bill_list = await congress_client.get_bill_list()
     print(bill_list)
-    bill_overview = await congress_client.get_bill_overview(110, "HCONRES", 10)
+    bill_overview = await congress_client.get_bill_overview(110, "hconres", 10)
     print(bill_overview)
+    bill_actions = await congress_client.get_bill_actions(110, "hconres", 10)
+    print(bill_actions)
 
 
 if __name__ == "__main__":
